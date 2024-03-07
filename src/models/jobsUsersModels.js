@@ -35,7 +35,8 @@ async function searchUsersInTableUsers(id) {
   const pool = await connection.openConnection();
 
   try {
-    const query = `SELECT * FROM USUARIO_DGCS WHERE ID_USUARIO_DGCS = ${id}`;
+  /*   const query = `SELECT * FROM USUARIO_DGCS WHERE ID_USUARIO_DGCS = ${id}`; */
+    const query = `SELECT * FROM USUARIO_DGCS WHERE ${id}`;
 
     const result = await pool.request().query(query);
 

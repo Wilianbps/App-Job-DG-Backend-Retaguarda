@@ -6,29 +6,34 @@ async function getAllUsers(req, res) {
 }
 
 async function searchUsersOnStage(req, res) {
-  const { table, storeCode } = req.query;
+  try {
+    const { table, storeCode } = req.query;
 
-  if (!table || !storeCode) return res.status(400).end();
+    if (!table || !storeCode) return res.status(400).end();
 
-  const usersOnStage = await jobsUsersModels.searchUsersOnStage(
-    table,
-    storeCode
-  );
+    const usersOnStage = await jobsUsersModels.searchUsersOnStage(
+      table,
+      storeCode
+    );
 
-  const data = usersOnStage.recordsets[0];
+    const data = usersOnStage.recordsets[0];
 
-  const users = [];
+    const users = [];
 
-  if (data.length > 0) {
-    for (let i = 0; i < data.length; i++) {
-      const id = data[i].ID;
-      const userData = await jobsUsersModels.searchUsersInTableUsers(id);
-      users.push(userData.recordset[0]);
+    if (data.length > 0) {
+      for (let i = 0; i < data.length; i++) {
+        const id = data[i].ID;
+        const userData = await jobsUsersModels.searchUsersInTableUsers(id);
+        users.push(userData.recordset[0]);
+      }
+
+      return res.status(200).json(users);
+    } else {
+      return res.status(200).json({ message: "Não havia dados" });
     }
-
-    return res.status(200).json(users);
-  } else {
-    return res.status(200).json({ message: "Não havia dados" });
+  } catch (error) {
+    console.log("error", error)
+    return res.status(400).send();
   }
 }
 
@@ -51,6 +56,5 @@ async function updateStatusOnStage(req, res) {
     res.status(400).end();
   }
 }
-
 
 export default { getAllUsers, searchUsersOnStage, updateStatusOnStage };
