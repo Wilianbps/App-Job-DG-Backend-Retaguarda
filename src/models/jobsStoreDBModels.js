@@ -31,12 +31,12 @@ async function searchUsersOnStage(table, storeCode) {
   }
 }
 
-async function searchUsersInTableUsers(id) {
+async function searchUsersInTableUsers(id, table) {
   const pool = await connection.openConnection();
 
   try {
-  /*   const query = `SELECT * FROM USUARIO_DGCS WHERE ID_USUARIO_DGCS = ${id}`; */
-    const query = `SELECT * FROM USUARIO_DGCS WHERE ${id}`;
+    /*   const query = `SELECT * FROM USUARIO_DGCS WHERE ID_USUARIO_DGCS = ${id}`; */
+    const query = `SELECT * FROM ${table} WHERE ${id}`;
 
     const result = await pool.request().query(query);
 
@@ -53,7 +53,8 @@ async function updateStageStatus(id) {
   const pool = await connection.openConnection();
 
   try {
-    const query = `UPDATE STAGE SET STAGE_STATUS = 2 WHERE ID = ${id}`;
+    const dateProcessed = new Date().toISOString();
+    const query = `UPDATE STAGE SET STAGE_STATUS = 2, DATA_PROCESSADO = '${dateProcessed}' WHERE STAGE_ID = ${id}`;
 
     const result = await pool.request().query(query);
 
@@ -66,4 +67,9 @@ async function updateStageStatus(id) {
   }
 }
 
-export default { getAll, searchUsersOnStage, searchUsersInTableUsers, updateStageStatus};
+export default {
+  getAll,
+  searchUsersOnStage,
+  searchUsersInTableUsers,
+  updateStageStatus,
+};

@@ -1,8 +1,9 @@
 import express from "express";
-import jobsUsersController from "./controllers/jobsUsersController.js";
+import jobsStoreDBController from "./controllers/jobsStoreDBController.js";
 import config from "./configs/config.js";
 import configConnectionDBController from "./controllers/configConnectionDBController.js";
 import testConnectionController from "./controllers/testConnectionController.js";
+import getActiveTablesController from "./controllers/getActiveTablesController.js";
 
 const router = express.Router();
 
@@ -27,9 +28,9 @@ router.post(
   configConnectionDBController.VerifyConnectionDB
 );
 
-router.get("/users", jobsUsersController.searchUsersOnStage);
-router.get("/jobs/users", jobsUsersController.getAllUsers);
-
-router.post("/users", jobsUsersController.updateStatusOnStage);
+router.get("/search-on-stage", jobsStoreDBController.searchOnStage);
+router.put("/update-Status-On-Stage", jobsStoreDBController.updateStatusOnStage);
+router.get("/jobs/get-all-users", jobsStoreDBController.getAllUsers);
+router.get("/active-store-tables", getActiveTablesController.getActiveTables);
 
 export default router;
