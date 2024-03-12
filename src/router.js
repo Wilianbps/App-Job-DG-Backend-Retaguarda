@@ -31,6 +31,7 @@ router.post(
 router.get("/search-on-stage", jobsStoreDBController.searchOnStage);
 router.put("/update-Status-On-Stage", jobsStoreDBController.updateStatusOnStage);
 router.get("/jobs/get-all-users", jobsStoreDBController.getAllUsers);
-router.get("/active-store-tables", getActiveTablesController.getActiveTables);
+router.get("/active-store-tables", getActiveTablesController.getActiveTablesStore);
+router.get("/all-active-tables", getActiveTablesController.getAllActiveTables);
 
 export default router;
