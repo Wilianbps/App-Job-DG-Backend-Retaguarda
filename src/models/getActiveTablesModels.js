@@ -10,7 +10,6 @@ async function selectAllActiveTables(status) {
     );
 
     const tables = query.recordsets[0];
-    console.log(tables);
 
     return tables;
   } catch (error) {

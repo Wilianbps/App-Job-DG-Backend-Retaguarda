@@ -50,8 +50,6 @@ async function updateStatusOnStage(req, res) {
   try {
     const data = req.body;
 
-    console.log("dataUsers", data);
-
     if (!data) return res.status(400).send();
 
      if (data.length > 0) {
