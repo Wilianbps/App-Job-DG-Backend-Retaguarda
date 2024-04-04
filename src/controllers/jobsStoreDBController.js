@@ -19,10 +19,10 @@ async function searchOnStage(req, res) {
     const dataStage = usersOnStage.recordsets[0];
 
     const data = [];
-
+    let id = ""
     if (dataStage.length > 0) {
       for (let i = 0; i < dataStage.length; i++) {
-        const id = dataStage[i].ID;
+        id = dataStage[i].ID;
         const result = await jobsStoreDBModels.searchUsersInTableUsers(id, table);
         data.push(result.recordset[0]);
       }
@@ -30,6 +30,7 @@ async function searchOnStage(req, res) {
       const mergedArray = data.map((item, index) => {
         return {
           ...item,
+          id,
           stageId: dataStage[index].STAGE_ID,
           type: dataStage[index].TIPO,
           table,
