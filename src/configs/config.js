@@ -4,7 +4,12 @@ const config = {
   server: 'WIL-BRIT0\\SQLEXPRESS',
   database: 'DGCS_ERP',
   port: 1433,
-  options: { encrypt: true, trustServerCertificate: true }
+  options: { encrypt: true, trustServerCertificate: true },
+  pool: {
+    max: 40, 
+    min: 0, 
+    idleTimeoutMillis: 30000 
+  },
 };
 
 export default config;
