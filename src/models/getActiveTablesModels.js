@@ -13,7 +13,7 @@ async function selectAllActiveTables(status) {
 
     return tables;
   } catch (error) {
-    console.log(`Erro ao executar a consulta ${error.message}`);
+    console.log(`Erro ao executar a consulta teste selectAllActiveTables${error.message}`);
   } finally {
     await connection.closeConnection(pool);
     console.log("Conexão fechada");
@@ -35,7 +35,7 @@ async function selectActiveTablesStore(table) {
 
     return tables;
   } catch (error) {
-    console.log(`Erro ao executar a consulta ${error.message}`);
+    console.log(`Erro ao executar a consulta teste selectActiveTablesStore${error.message}`);
   } finally {
     await connection.closeConnection(pool);
     console.log("Conexão fechada");

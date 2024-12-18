@@ -9,43 +9,59 @@ async function searchOnStage(req, res) {
   try {
     const { table, storeCode } = req.query;
 
+    // Verifica se os parâmetros necessários foram passados na query
     if (!table || !storeCode) return res.status(400).end();
 
-    const usersOnStage = await jobsStoreDBModels.searchUsersOnStage(
-      table,
-      storeCode
-    );
+    // Realiza a busca no banco de dados
+    const usersOnStage = await jobsStoreDBModels.searchUsersOnStage(table, storeCode);
 
+    if (!usersOnStage || !usersOnStage.recordsets || usersOnStage.recordsets.length === 0) {
+      console.log("Nenhum resultado encontrado.");
+      return res.status(404).json({ message: "Não havia dados" });
+    }
+
+    // Extrai os dados da primeira recordset
     const dataStage = usersOnStage.recordsets[0];
 
     const data = [];
 
-    if (dataStage.length > 0) {
-      for (let i = 0; i < dataStage.length; i++) {
-        const id = dataStage[i].ID;
-        const result = await jobsStoreDBModels.searchUsersInTableUsers(id, table);
-        result.recordset[0].whereId = id;
-        data.push(result.recordset[0]);
+    // Itera sobre cada linha dos dados para buscar informações adicionais
+    for (const stageRow of dataStage) {
+      const idCondition = stageRow.ID; // A cláusula completa do ID (e.g., "ID_AUX_ENTRADA = '10685'")
+      console.log(`Buscando dados com ID Condition: ${idCondition}`);
+
+      // Busca os dados na tabela correspondente
+      const result = await jobsStoreDBModels.searchUsersInTableUsers(idCondition, table);
+
+      if (result.recordset && result.recordset.length > 0) {
+        const user = result.recordset[0];
+        user.whereId = idCondition; // Adiciona a condição usada como referência
+        data.push(user);
+      } else {
+        console.log(`Nenhum dado encontrado para ID Condition: ${idCondition}`);
       }
-
-      const mergedArray = data.map((item, index) => {
-        return {
-          ...item,
-          stageId: dataStage[index].STAGE_ID,
-          type: dataStage[index].TIPO,
-          table,
-        };
-      });
-
-      return res.status(200).json(mergedArray);
-    } else {
-      return res.status(200).json({ message: "Não havia dados" });
     }
+
+    // Junta os dados da primeira consulta com os dados da segunda
+    const mergedArray = data.map((item, index) => {
+      return {
+        ...item,
+        stageId: dataStage[index].STAGE_ID,
+        type: dataStage[index].TIPO,
+        table,
+      };
+    });
+
+    // Retorna a resposta para o cliente com os dados combinados
+    return res.status(200).json(mergedArray);
+
   } catch (error) {
+    // Em caso de erro, loga o erro e retorna uma resposta de erro
     console.log("error", error);
-    return res.status(400).send();
+    return res.status(400).send({ message: "Erro ao processar a solicitação." });
   }
 }
+
 
 async function updateStatusOnStage(req, res) {
   try {
@@ -53,7 +69,7 @@ async function updateStatusOnStage(req, res) {
 
     if (!data) return res.status(400).send();
 
-     if (data.length > 0) {
+    if (data.length > 0) {
       for (let i = 0; i < data.length; i++) {
         const id = data[i].stageId;
         await jobsStoreDBModels.updateStageStatus(id);

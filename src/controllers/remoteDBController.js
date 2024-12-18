@@ -4,8 +4,6 @@ async function insertRegisterInRemoteDB(req, res) {
   try {
     const dataUsers = req.body;
 
-    console.log("dados chegou aqui", dataUsers)
-
     if (Object.keys(dataUsers).length === 0)
       return res.status(200).json({ message: "Não havia dados " });
 
