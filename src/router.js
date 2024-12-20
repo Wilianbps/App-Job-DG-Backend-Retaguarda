@@ -1,6 +1,6 @@
 import express from "express";
 import jobsStoreDBController from "./controllers/jobsStoreDBController.js";
-import config from "./configs/config.js";
+import config from "./config.js";
 import configConnectionDBController from "./controllers/configConnectionDBController.js";
 import testConnectionController from "./controllers/testConnectionController.js";
 import getActiveTablesController from "./controllers/getActiveTablesController.js";
