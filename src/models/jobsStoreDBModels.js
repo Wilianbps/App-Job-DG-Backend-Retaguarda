@@ -18,9 +18,11 @@ async function searchUsersOnStage(table, storeCode) {
   const pool = await connection.openConnection();
 
   try {
-    const query = `SELECT * FROM STAGE WHERE (TABELA = '${table}' AND CODIGO_LOJA = '${storeCode}' AND STAGE_STATUS = 1)`;
+    const query = `SELECT TOP 50 * FROM STAGE WHERE (TABELA = '${table}' AND CODIGO_LOJA = '${storeCode}' AND STAGE_STATUS = 1)`;
 
     const result = await pool.request().query(query);
+
+    console.log(query,table,storeCode)
 
     // Verifique se result e recordsets existem antes de acessar
     if (!result || !result.recordsets || result.recordsets.length === 0) {
@@ -45,6 +47,8 @@ async function searchUsersInTableUsers(id, table) {
   try {
 
     const query = `SELECT * FROM ${table} WHERE ${id}`;
+    
+    console.log(query,id,table)
 
     const result = await pool.request().query(query);
 

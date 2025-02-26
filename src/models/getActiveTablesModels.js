@@ -6,7 +6,7 @@ async function selectAllActiveTables(status) {
   try {
     const query = await pool.request().query(
       `SELECT ID_STAGE_TABLES AS id, NOME_TABELA AS tableName, ORDEM AS orderTable, STATUS AS status, TIPO AS type FROM STAGE_TABLES WHERE STATUS = 
-         ${parseInt(status)}`
+         ${parseInt(status)} ORDER BY 3`
     );
 
     const tables = query.recordsets[0];
